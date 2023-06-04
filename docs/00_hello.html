@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>The Hitchhiker’s Guide to Responsible Machine Learning - Step 0. Hello model!</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./01_eda.html" rel="next">
+<link href="./about.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-5650686-12"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-5650686-12');
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating slimcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Step 0. Hello model!</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">The Hitchhiker’s Guide to Responsible Machine Learning</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Cover</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">But what is it all about?</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00_hello.html" class="sidebar-item-text sidebar-link active">Step 0. Hello model!</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_eda.html" class="sidebar-item-text sidebar-link">Step 1. Data Exploration (EDA)</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_performance.html" class="sidebar-item-text sidebar-link">Step 2. Model Performance</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_tree.html" class="sidebar-item-text sidebar-link">Step 3. Grow a tree</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_forest.html" class="sidebar-item-text sidebar-link">Step 4. Plant a forest</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_hpo.html" class="sidebar-item-text sidebar-link">Step 5. Hyperparameter Optimisation</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_vi.html" class="sidebar-item-text sidebar-link">Step 6. Variable-importance</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_pdp.html" class="sidebar-item-text sidebar-link">Step 7. Partial Dependence and Accumulated Local Effects</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_shap.html" class="sidebar-item-text sidebar-link">Step 8. Shapley values and the Break-down plots</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_cp.html" class="sidebar-item-text sidebar-link">Step 9. Ceteris Paribus</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_deployment.html" class="sidebar-item-text sidebar-link">Step 10. Model Deployment</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_summary.html" class="sidebar-item-text sidebar-link">About this book</a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#sars-cov-2-case-study" id="toc-sars-cov-2-case-study" class="nav-link active" data-scroll-target="#sars-cov-2-case-study">SARS-COV-2 case study</a></li>
+  <li><a href="#cdc-statistics" id="toc-cdc-statistics" class="nav-link" data-scroll-target="#cdc-statistics">CDC statistics</a></li>
+  <li><a href="#python-snippets" id="toc-python-snippets" class="nav-link" data-scroll-target="#python-snippets">Python snippets</a></li>
+  <li><a href="#r-snippets" id="toc-r-snippets" class="nav-link" data-scroll-target="#r-snippets">R snippets</a></li>
+  </ul>
+</nav>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Step 0. Hello model!</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="column-screen-inset-right">
+<p><img width="100%" src="figures/comic_02.png"></p>
+</div>
+<p>Predictive models have been used throughout entire human history. Priests in ancient Egypt could predict when the Nile would flood or a solar eclipse would come. Developments in statistics, increasing availability of datasets, and increasing computing power allow predictive models to be built faster and deployed in a rapidly growing number of applications.</p>
+<p>Today, predictive models are used everywhere. Planning of the supply chain for a large corporation, recommending lunch or a movie for the evening, or predicting traffic jams in a city. Newspapers are full of exciting applications. But how are such models developed?</p>
+<p>In this book we will go through the full cycle of training and testing of predictive models. We’ll load the data, explore it, build some models, and move on to the main part of this book - detailed model analysis using eXplainable Artificial Intelligence (XAI) techniques. The core intuition behind these methods is presented in consecutive sections. If you would like to learn more about discussed methods, a detailed introduction to them can be found in the book (available in paperback and online).</p>
+<section id="sars-cov-2-case-study" class="level2">
+<h2 class="anchored" data-anchor-id="sars-cov-2-case-study">SARS-COV-2 case study</h2>
+<p>To demonstrate what responsible predictive modelling looks like, we used data obtained in collaboration with the Polish Institute of Hygiene in modelling mortality after the Covid infection. We realize that data on Coronavirus disease can evoke negative feelings. However, it is a good example of how predictive modelling can directly impact our society and how data analysis allows us to deal with complex, important and topical problems.</p>
+<p>All the results presented in this book can be independently reproduced using the snippets and instructions presented in this book. If you do not want to retype them, then all the examples, data, and codes can be found on the <a href="https://betaandbit.github.io/RML/">https://betaandbit.github.io/RML/</a>. Please note that the data presented at this URL is artificially generated to mirror relations in the actual data.</p>
+<p>The procedure outlined here is presented for mortality modelling, but the same process can be replicated whether modelling patient survival, housing pricing, or credit scoring is concerned.</p>
+<p>When browsing through examples of predictive modelling, one may get the wrong impression that the life cycle of the model begins with the data from the internet and ends with validation on an independent dataset. However, this is an oversimplification. As you will see in a minute, we can create a model even without raw data.</p>
+<p>In fact, the life cycle of a predictive model begins with a <strong>well-defined problem</strong>. In this example, we are looking for a model that assesses the risk of death after being diagnosed with Covid. We don’t want to guess who will survive and who won’t. Instead, we want to construct a score that allows us to sort patients by their individual risk. Why do we need such a model? For example, those at higher risk of death could be given higher protection, such as providing them with pulse oximeters or preferential vaccination. For this reason, in the following sections, we introduce and use model performance measures that evaluate rankings of scores, such as Area Under Curve (AUC). Pick a model evaluation measure suitable for the problem posed.</p>
+<p>Having defined the problem we want to solve, we can move to the next step, which is to <strong>collect all the available information</strong>. Often the solution to the problem can be found in the literature, whether in the form of a ready-made feature prediction function, a discussion of what features are important, or sample data.</p>
+<p>If there are no ready-to-use solutions and we have to collect the data ourselves, it is always worth considering where and what data to collect in order to build the model on a <strong>representative sample</strong>. The problem of data representativeness is a topic for a separate book. Incorrectly collected data will create biases that are hard to discover and even harder to fix.</p>
+<p>Note, that in this study, we used data on all patients reached by the sanitary inspectorate between March and August 2020. It would seem that data collected in this way would be free of bias, but we were able to detect some. In April, the pandemic spread faster among coal mine workers, who were more likely to be young men, which may have influenced the fluctuations in mortality.</p>
+<p>We may think of a predictive model as a function that computes certain predictions for specific input data. Usually, such a function is built automatically based on the data. But technically, the model can be any function defined in any way.</p>
+</section>
+<section id="cdc-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="cdc-statistics">CDC statistics</h2>
+<p>Our first model will be based on the statistics collected by the <a href="https://www.cdc.gov/">Centers for Disease Control and Prevention (CDC)</a>. That’s right; sometimes, we don’t need raw data to build a predictive model. We’ll start by turning a table with mortality statistics into a model.</p>
+<p>Note, that the risk for the reference group is not included in <a href="#fig-tableCDC">Figure&nbsp;<span>1</span></a>. To calculate the mortality predictions we use here the baseline relative risk determined on Polish data at the beginning of Covid pandemic, which is 0.003% for the reference group. Currently it is much smaller as large fraction of population is already immunized.</p>
+<div id="fig-tableCDC" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/cdc_stats.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Mortality statistics as presented on the CDC website accessed on May 2021. This table shows rate ratios compared to the group 5- to 17-year-olds (selected as the reference group because it has accounted for the largest cumulative number of COVID-19 cases compared to other age groups).</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="python-snippets" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="python-snippets">Python snippets</h2>
+<p>In this book we follow the convention that a model is an object that has function, which transforms the <span class="math inline">\(n\times p\)</span> input matrix with <span class="math inline">\(p\)</span> variables for <span class="math inline">\(n\)</span> observations into a vector of <span class="math inline">\(n\)</span> predictions. Below, we define a class that calculates odds of Covid related death based on statistics from the CDC website.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> cdc_risk:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, base_risk <span class="op">=</span> <span class="fl">0.00003</span>):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.base_risk <span class="op">=</span> base_risk</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>, x):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        rratio <span class="op">=</span> np.array([<span class="dv">7900</span>] <span class="op">*</span> x.shape[<span class="dv">0</span>])</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        rratio[x.Age <span class="op">&lt;</span> <span class="fl">84.5</span>] <span class="op">=</span> <span class="dv">2800</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        rratio[x.Age <span class="op">&lt;</span> <span class="fl">74.5</span>] <span class="op">=</span> <span class="dv">1100</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        rratio[x.Age <span class="op">&lt;</span> <span class="fl">64.5</span>] <span class="op">=</span> <span class="dv">400</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        rratio[x.Age <span class="op">&lt;</span> <span class="fl">49.5</span>] <span class="op">=</span> <span class="dv">130</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        rratio[x.Age <span class="op">&lt;</span> <span class="fl">39.5</span>] <span class="op">=</span> <span class="dv">45</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        rratio[x.Age <span class="op">&lt;</span> <span class="fl">29.5</span>] <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        rratio[x.Age <span class="op">&lt;</span> <span class="fl">17.5</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        rratio[x.Age <span class="op">&lt;</span> <span class="fl">4.5</span>] <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> rratio <span class="op">*</span> <span class="va">self</span>.base_risk</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>model_cdc <span class="op">=</span> cdc_risk()</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>steve <span class="op">=</span> pd.DataFrame({<span class="st">"Age"</span>: [<span class="dv">25</span>], <span class="st">"Diabetes"</span>: [<span class="st">"Yes"</span>]})</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>model_cdc.predict(steve)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">## array([0.00045])</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Predictive models may have different structures. To work responsibly with a large number of models, a uniform standardized interface is needed. In this book, we use the abstraction implemented in the <code>dalex</code> package <span class="citation" data-cites="dalexpy">Baniecki et al. (<a href="#ref-dalexpy" role="doc-biblioref">2021</a>)</span>. The <code>Explainer</code> constructor from this package creates an <em>Explainer</em>, i.e.&nbsp;a wrapper for the model that will allow you to work uniformly with objects of very different structures. The first argument is a model. It can be an object of any class but it is assumed that the objects contains the <code>predict</code> function as in our example. The <em>label</em> specifies a unique name that appear in the plots while other arguments will be introduced in next sections.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-dalexpy" class="csl-entry" role="doc-biblioentry">
+Baniecki, Hubert, Wojciech Kretowicz, Piotr Piatyszek, Jakub Wisniewski, and Przemyslaw Biecek. 2021. <span>“Dalex: Responsible Machine Learning with Interactive Explainability and Fairness in Python.”</span> <em>Journal of Machine Learning Research</em> 22 (214): 1–7. <a href="http://jmlr.org/papers/v22/20-1473.html">http://jmlr.org/papers/v22/20-1473.html</a>.
+</div></div><div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dalex <span class="im">as</span> dx</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>explainer_cdc <span class="op">=</span> dx.Explainer(model_cdc, label<span class="op">=</span><span class="st">"CDC"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>explainer_cdc.predict(steve)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">## array([0.00045])</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Using the <code>Explainer</code> may seem like an unnecessary complication at the moment, but on the following pages, we show how it simplifies the work.</p>
+</section>
+<section id="r-snippets" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="r-snippets">R snippets</h2>
+<p>A predictive model is a function that transforms the <span class="math inline">\(n\times p\)</span> data frame with <span class="math inline">\(p\)</span> variables for <span class="math inline">\(n\)</span> observations into a vector of <span class="math inline">\(n\)</span> predictions. For further examples, below, we define a function that calculates odds of Covid related death based on statistics from the CDC website for different age groups.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cdc_risk <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">base_risk =</span> <span class="fl">0.00003</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  rratio <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">7900</span>, <span class="fu">nrow</span>(x))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  rratio[<span class="fu">which</span>(x<span class="sc">$</span>Age <span class="sc">&lt;</span> <span class="fl">84.5</span>)] <span class="ot">&lt;-</span> <span class="dv">2800</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  rratio[<span class="fu">which</span>(x<span class="sc">$</span>Age <span class="sc">&lt;</span> <span class="fl">74.5</span>)] <span class="ot">&lt;-</span> <span class="dv">1100</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  rratio[<span class="fu">which</span>(x<span class="sc">$</span>Age <span class="sc">&lt;</span> <span class="fl">64.5</span>)] <span class="ot">&lt;-</span> <span class="dv">400</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  rratio[<span class="fu">which</span>(x<span class="sc">$</span>Age <span class="sc">&lt;</span> <span class="fl">49.5</span>)] <span class="ot">&lt;-</span> <span class="dv">130</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  rratio[<span class="fu">which</span>(x<span class="sc">$</span>Age <span class="sc">&lt;</span> <span class="fl">39.5</span>)] <span class="ot">&lt;-</span> <span class="dv">45</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  rratio[<span class="fu">which</span>(x<span class="sc">$</span>Age <span class="sc">&lt;</span> <span class="fl">29.5</span>)] <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  rratio[<span class="fu">which</span>(x<span class="sc">$</span>Age <span class="sc">&lt;</span> <span class="fl">17.5</span>)] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  rratio[<span class="fu">which</span>(x<span class="sc">$</span>Age <span class="sc">&lt;</span> <span class="fl">4.5</span>)]  <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  rratio <span class="sc">*</span> base_risk</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>steve <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Age =</span> <span class="dv">25</span>, <span class="at">Diabetes =</span> <span class="st">"Yes"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cdc_risk</span>(steve)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.00045 </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Predictive models may have different structures. To work responsibly with a large number of models, a uniform standardized interface is needed. In this book, we use the abstraction implemented in the <code>DALEX</code> package <span class="citation" data-cites="DALEX">Biecek (<a href="#ref-DALEX" role="doc-biblioref">2018</a>)</span>.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-DALEX" class="csl-entry" role="doc-biblioentry">
+Biecek, Przemyslaw. 2018. <span>“<span class="nocase">DALEX: Explainers for Complex Predictive Models in R</span>.”</span> <em>Journal of Machine Learning Research</em> 19 (84): 1–5. <a href="https://jmlr.org/papers/v19/18-416.html">https://jmlr.org/papers/v19/18-416.html</a>.
+</div></div><p>The <code>explain</code> function from this package creates an <em>explainer</em>, i.e.&nbsp;a wrapper for the model that will allow you to work uniformly with objects of very different structures. The first argument is a model. It can be an object of any class. The second argument is a function that calculates the vector of predictions. <code>DALEX</code> package can often guess which function is needed for a specific model, but in this book, we show it explicitly in order to emphasize how the wrapper works. The <code>type</code> argument specifies the model type and the <code>label</code> specifies a unique name that appear in the plots.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"DALEX"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>model_cdc <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(cdc_risk,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">predict_function =</span> <span class="cf">function</span>(m, x) <span class="fu">m</span>(x),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">type  =</span> <span class="st">"classification"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">label =</span> <span class="st">"CDC"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model_cdc, steve)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.00045</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Using the <code>explain</code> function may seem like an unnecessary complication at the moment, but on the following pages, we show how it simplifies the work.</p>
+
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./about.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">But what is it all about?</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./01_eda.html" class="pagination-link">
+        <span class="nav-page-text">Step 1. Data Exploration (EDA)</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
