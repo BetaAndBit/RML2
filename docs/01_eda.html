@@ -299,26 +299,25 @@ div.csl-indent {
 <p>The data is divided into two sets: <code>covid_spring</code> and <code>covid_summer</code>. The first set was acquired in spring 2020 and will be used as training data, while the second dataset was acquired in the summer and will be used for validation. In machine learning, model validation is performed on a separate data set called validation data. This controls the risk of overfitting an elastic model to the training data. If we do not have a separate set, then it is generated using cross-validation, out-of-sample, out-of-time or similar data splitting techniques.</p>
 <section id="python-snippet" class="level2">
 <h2 class="anchored" data-anchor-id="python-snippet">Python snippet</h2>
-<p>All files needed to replicate the following code are available at website <a href="https://github.com/BetaAndBit/RML">https://github.com/BetaAndBit/RML</a>. Download <code>csv</code> file with data and save them the working directory. Let’s start our analyses with reading data from these files.</p>
+<p>All files needed to replicate the following code are available at website <a href="https://github.com/BetaAndBit/RML2">https://github.com/BetaAndBit/RML2</a>. Download <code>csv</code> file with data and save them the working directory. Let’s start our analyses with reading data from these files.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>covid_spring <span class="op">=</span> pd.read_csv(<span class="st">"py_covid_spring.csv"</span>, delimiter<span class="op">=</span><span class="st">";"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>covid_summer <span class="op">=</span> pd.read_csv(<span class="st">"py_covid_summer.csv"</span>, delimiter<span class="op">=</span><span class="st">";"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s use the package <code>matplotlib</code> to draw a simple histogram for <code>Age</code> variable, and <code>statsmodels</code> to draw a mosaic plot for <code>Diabetes</code> variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># See Figure 5</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>covid_spring.pivot(columns<span class="op">=</span><span class="st">"Death"</span>, values<span class="op">=</span><span class="st">"Age"</span>).plot.hist(bins<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>statsmodels.graphics.mosaicplot <span class="im">import</span> mosaic</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>mosaic(covid_spring, [<span class="st">'Death'</span>, <span class="st">'Diabetes'</span>])</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>covid_spring.pivot(columns<span class="op">=</span><span class="st">"Death"</span>, values<span class="op">=</span><span class="st">"Age"</span>).plot.hist(bins<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.mosaicplot <span class="im">import</span> mosaic</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>mosaic(covid_spring, [<span class="st">'Death'</span>, <span class="st">'Diabetes'</span>])</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-02_py_mosaic" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="figures/02_py_mosaic.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Left panel: Histogram for the Age variable by survivor status. Right panel: The mosaic plot shows that there are significantly fewer people with diabetes, but among them the mortality is higher.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Left panel: Histogram for the Age variable by survivor status. Right panel: The mosaic plot shows that there are significantly fewer people with diabetes, but among them the mortality is higher.</figcaption><p></p>
 </figure>
 </div>
 <p>A handy way to summarise tabular data in groups is the so-called <em>,,Table 1’’</em>. This is a summary of the main characteristics of each variable broken down into groups defined by the variable of interest (here, binary information about Covid death). The name stems from the fact that this summary of the data is usually the first table to be shown in many medical and related scientific journals.</p>
@@ -362,7 +361,7 @@ Wickham, Hadley, and Garrett Grolemund. 2017. <em>R for Data Science: Import, Ti
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>covid_spring <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"covid_spring.csv"</span>, <span class="at">sep =</span><span class="st">";"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>covid_summer <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"covid_summer.csv"</span>, <span class="at">sep =</span><span class="st">";"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We use the package to draw a simple histogram for Age, and to draw a mosaic plot for . Note that the plots in the margins are graphically edited, so they look slightly different from the plots generated by these short instructions.</p>
+<p>We use the package to draw a simple histogram for Age, and <code>ggmosaic</code> to draw a mosaic plot for <code>Diabetes</code>. Note that the plots in the margins are graphically edited, so they look slightly different from the plots generated by these short instructions.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid_spring) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(Age, <span class="at">fill =</span> Death))</span>
@@ -372,10 +371,10 @@ Wickham, Hadley, and Garrett Grolemund. 2017. <em>R for Data Science: Import, Ti
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">product</span>(Diabetes), <span class="at">fill =</span> Death))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A handy way to summarise tabular data in groups is the so-called <em>,,Table 1’’</em>. This is a summary of the main characteristics of each variable broken down into groups defined by the variable of interest (here, binary information about Covid death).</p>
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-02_r_mosaic" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="figures/02_r_mosaic.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Left panel: Histogram for the Age variable by survivor status. Right panel: The mosaic plot shows that there are significantly fewer people with diabetes, but among them the mortality is higher.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Left panel: Histogram for the Age variable by survivor status. Right panel: The mosaic plot shows that there are significantly fewer people with diabetes, but among them the mortality is higher.</figcaption><p></p>
 </figure>
 </div>
 <div class="cell">
@@ -408,7 +407,7 @@ Wickham, Hadley, and Garrett Grolemund. 2017. <em>R for Data Science: Import, Ti
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>covid_spring <span class="ot">&lt;-</span> covid_spring[,selected_vars]</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>covid_summer <span class="ot">&lt;-</span> covid_summer[,selected_vars]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Data exploration and cleansing often consume most of the time spent on data analysis. Here we have only touched on exploration, but even this initial analysis helped to determine that is an important characteristic (we will confirm this later).</p>
+<p>Data exploration and cleansing often consume most of the time spent on data analysis. Here we have only touched on exploration, but even this initial analysis helped to determine that <code>Age</code> is an important characteristic (we will confirm this later).</p>
 
 
 

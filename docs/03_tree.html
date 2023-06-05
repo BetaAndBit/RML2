@@ -366,10 +366,10 @@ Breiman, L., J. H. Friedman, R. A. Olshen, and C. J. Stone. 1984. <em>Classifica
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>performance_cdc.plot(performance_dtc, geom<span class="op">=</span><span class="st">"roc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-03_py_roc_tree" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="figures/03_py_roc_tree.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">ROC curves for the CDC and tree model.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: ROC curves for the CDC and tree model.</figcaption><p></p>
 </figure>
 </div>
 </section>
@@ -392,7 +392,7 @@ Hothorn, Torsten, and Achim Zeileis. 2015. <span>“<span class="nocase">partyki
 <div id="fig-r_big_tree" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="figures/03_r_big_tree.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4: The first split in the tree is for the Age variable. Patients are divided into younger than 67 (left) and older than 67 (right). In the same manner, one can read other splits. The criteria adopted resulted in a tree with seven leaves. The leaves include information about the number of patients who reached that leaf and the proportion of each class.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: The first split in the tree is for the Age variable. Patients are divided into younger than 67 (left) and older than 67 (right). In the same manner, one can read other splits. The criteria adopted resulted in a tree with seven leaves. The leaves include information about the number of patients who reached that leaf and the proportion of each class.</figcaption><p></p>
 </figure>
 </div>
 <div class="cell">
@@ -418,10 +418,10 @@ Hothorn, Torsten, and Achim Zeileis. 2015. <span>“<span class="nocase">partyki
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mp_tree, mp_cdc, <span class="at">geom=</span><span class="st">"roc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-03_r_roc_tree" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="figures/03_r_roc_tree.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">ROC curves for the CDC and tree model. The tree model has on average better predictions.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6: ROC curves for the CDC and tree model. The tree model has on average better predictions.</figcaption><p></p>
 </figure>
 </div>
 
