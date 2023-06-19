@@ -358,8 +358,8 @@ Breiman, L., J. H. Friedman, R. A. Olshen, and C. J. Stone. 1984. <em>Classifica
 </div>
 <p>As before, we can calculate the performance of the model with the method <code>model_performance</code>. Here on the test data the performance is lower than for the previous model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>performance_cdc <span class="op">=</span> explainer_dtc.model_performance(cutoff <span class="op">=</span> <span class="fl">0.1</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>performance_cdc.result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>performance_dtc <span class="op">=</span> explainer_dtc.model_performance(cutoff <span class="op">=</span> <span class="fl">0.1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>performance_dtc.result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><img width="80%" src="figures/py_performance_cdt.png"></p>
 <p>Let’s add the AUC curve for the decision tree, to the curve obtained from the previous model.</p>
