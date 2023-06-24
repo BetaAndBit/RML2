@@ -142,14 +142,14 @@ div.csl-indent {
     "search-submit-button-title": "Submit"
   }
 }</script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-5650686-12"></script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-ZWLGMSWT14"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'UA-5650686-12');
+  gtag('config', 'G-ZWLGMSWT14');
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -296,8 +296,10 @@ div.csl-indent {
 </div>
 <p>Predictive models have been used throughout entire human history. Priests in ancient Egypt could predict when the Nile would flood or a solar eclipse would come. Developments in statistics, increasing availability of datasets, and increasing computing power allow predictive models to be built faster and deployed in a rapidly growing number of applications.</p>
 <p>Today, predictive models are used everywhere. Planning of the supply chain for a large corporation, recommending lunch or a movie for the evening, or predicting traffic jams in a city. Newspapers are full of exciting applications. But how are such models developed?</p>
-<p>In this book we will go through the full cycle of training and testing of predictive models. We’ll load the data, explore it, build some models, and move on to the main part of this book - detailed model analysis using eXplainable Artificial Intelligence (XAI) techniques. The core intuition behind these methods is presented in consecutive sections. If you would like to learn more about discussed methods, a detailed introduction to them can be found in the book (available in paperback and online).</p>
-<section id="sars-cov-2-case-study" class="level2">
+<p>In this book we will go through the full cycle of training and testing of predictive models. We’ll load the data, explore it, build some models, and move on to the main part of this book - detailed model analysis using eXplainable Artificial Intelligence (XAI) techniques. The core intuition behind these methods is presented in consecutive sections. If you would like to learn more about discussed methods, a detailed introduction to them can be found in the book <em>xplanatory Model Analysis</em> <span class="citation" data-cites="EMA">(<a href="#ref-EMA" role="doc-biblioref">Biecek and Burzykowski 2021</a>)</span> (available in paperback and online).</p>
+<div class="no-row-height column-margin column-container"><div id="ref-EMA" class="csl-entry" role="doc-biblioentry">
+Biecek, Przemyslaw, and Tomasz Burzykowski. 2021. <em><span>Explanatory Model Analysis</span></em>. Chapman; Hall/CRC, New York. <a href="https://pbiecek.github.io/ema/">https://pbiecek.github.io/ema/</a>.
+</div></div><section id="sars-cov-2-case-study" class="level2">
 <h2 class="anchored" data-anchor-id="sars-cov-2-case-study">SARS-COV-2 case study</h2>
 <p>To demonstrate what responsible predictive modelling looks like, we used data obtained in collaboration with the Polish Institute of Hygiene in modelling mortality after the Covid infection. We realize that data on Coronavirus disease can evoke negative feelings. However, it is a good example of how predictive modelling can directly impact our society and how data analysis allows us to deal with complex, important and topical problems.</p>
 <p>All the results presented in this book can be independently reproduced using the snippets and instructions presented in this book. If you do not want to retype them, then all the examples, data, and codes can be found on the <a href="https://betaandbit.github.io/RML/">https://betaandbit.github.io/RML/</a>. Please note that the data presented at this URL is artificially generated to mirror relations in the actual data.</p>
@@ -322,7 +324,7 @@ div.csl-indent {
 </section>
 <section id="python-snippets" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="python-snippets">Python snippets</h2>
-<p>In this book we follow the convention that a model is an object that has function, which transforms the <span class="math inline">\(n\times p\)</span> input matrix with <span class="math inline">\(p\)</span> variables for <span class="math inline">\(n\)</span> observations into a vector of <span class="math inline">\(n\)</span> predictions. Below, we define a class that calculates odds of Covid related death based on statistics from the CDC website.</p>
+<p>In this book we follow the convention that a model is an object that has <code>predict</code> function, which transforms the <span class="math inline">\(n\times p\)</span> input matrix with <span class="math inline">\(p\)</span> variables for <span class="math inline">\(n\)</span> observations into a vector of <span class="math inline">\(n\)</span> predictions. Below, we define a class <code>cdc_risk</code> that calculates odds of Covid related death based on statistics from the CDC website.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>

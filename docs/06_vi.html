@@ -123,14 +123,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-5650686-12"></script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-ZWLGMSWT14"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'UA-5650686-12');
+  gtag('config', 'G-ZWLGMSWT14');
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -360,7 +360,7 @@ VI(i) = L(f, X^{perm(i)}, y) - L(f, X, y),
 <p></p><figcaption class="figure-caption">Figure&nbsp;2: The importance of variables can be compared between various models, and it is usually a source of valuable information. In this plot, each bar starts at 1-AUC for the model on the original data and ends at 1-average AUC calculated on the data with the indicated variable permuted.</figcaption><p></p>
 </figure>
 </div>
-<p>For the CDC model, the only important variable is Age. For the tree model, the three important variables are Age, Cancer, and Cardiovascular diseases, an observation consistent with <a href="03_tree.html#fig-r_big_tree">Figure&nbsp;<span>4</span></a>. For the ranger model and the model after tuning of hyperparameters, more variables are taken into account. However, Age is indisputably the most important variable in all models.</p>
+<p>For the CDC model, the only important variable is Age. For the tree model, the three important variables are Age, Cancer, and Cardiovascular diseases, an observation consistent with <a href="03_tree.html#fig-r_big_tree">Figure&nbsp;<span>5</span></a>. For the ranger model and the model after tuning of hyperparameters, more variables are taken into account. However, Age is indisputably the most important variable in all models.</p>
 <p>The same perturbation technique can be used to analyze the importance of groups of variables. Just use the <code>variable_groups</code> argument. Grouping variables can be particularly useful if the number of variables is large and groups of variables describe some common aspects. In our case we could group all diseases together.</p>
 <p>For highly correlated variables, an interesting model exploration technique is <code>triplot</code>, summarising correlations structure via a dendrogram and also show the importance of groups of correlated variables. Still, variable importance analysis when variables are correlated must be performed with care.</p>
 
