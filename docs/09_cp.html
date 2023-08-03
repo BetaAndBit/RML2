@@ -133,6 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   gtag('config', 'G-ZWLGMSWT14');
 </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -243,6 +244,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
   <li><a href="#python-snippets" id="toc-python-snippets" class="nav-link active" data-scroll-target="#python-snippets">Python snippets</a></li>
   <li><a href="#r-snippets" id="toc-r-snippets" class="nav-link" data-scroll-target="#r-snippets">R snippets</a></li>
+  <li><a href="#variable-importance-through-oscillations" id="toc-variable-importance-through-oscillations" class="nav-link" data-scroll-target="#variable-importance-through-oscillations">Variable importance through oscillations</a></li>
+  <li><a href="#is-this-the-end" id="toc-is-this-the-end" class="nav-link" data-scroll-target="#is-this-the-end">Is this the end?</a></li>
   </ul>
 </nav>
 </nav>
@@ -275,26 +278,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div class="no-row-height column-margin column-container"><div class="">
 <p><img width="100%" src="figures/09_logo.png"></p>
-</div></div><p>Ceteris Paribus (CP) is a Latin phrase for “<em>other things being equal</em>”. It is also a very useful technique for an analysis of model behaviour for a single observation. CP profiles, sometimes called Individual Conditional Expectations (ICE), show how the model response would change for a selected observation if a value for one variable was changed while leaving the other variables unchanged.</p>
+</div></div><p>Once we know which variables most influenced the model’s prediction for a particular instance, the next question we want to answer is how and how much the variables affected this individual prediction. This leads to an analysis of the model’s response profiles as a~function of individual variables. We have already performed such an analysis at the global level using Partial Dependence profiles. But for complex models, the local behaviour may diverge from the global, especially if we analyze observations from low-density regions. The tool we will use for local profile analysis is Ceteris Paribus curves.</p>
+<p>Ceteris Paribus (CP) is a Latin phrase for “<em>other things being equal</em>”. It is also a very useful technique for an analysis of model behaviour for a single observation. CP profiles, sometimes called Individual Conditional Expectations (ICE), show how the model response would change for a selected observation if a value for one variable was changed while leaving the other variables unchanged.</p>
+<p>More formally, for a model <span class="math inline">\(f(x)\)</span>, variable <span class="math inline">\(i\)</span> and observation <span class="math inline">\(x^*\)</span> the CP profile is a function</p>
+<p><span class="math display">\[
+CP(t,i,x^*) = f(x^*_1, \cdots, x^*_{i-1}, t, x^*_{i+1}, \cdots, x^*_p).
+\]</span></p>
+<p>Note that if variable <span class="math inline">\(i\)</span> is correlated with other variables, changing its value independently of other variables can lead to off-manifold observations, so CP profiles should be analyzed with caution.</p>
 <p>While local variable attribution is a convenient technique for answering the question of <strong>which</strong> variables affect the prediction, the local profile analysis is a good technique for answering the question of <strong>how</strong> the model response depends on a particular variable. Or answering the question of <strong>what if</strong>…</p>
 <section id="python-snippets" class="level2">
 <h2 class="anchored" data-anchor-id="python-snippets">Python snippets</h2>
-<p>The <code>predict_profiles()</code> function calculates Ceteris Paribus profiles for a selected model and selected observations. By default, it calculates profiles for all variables, but one can limit this list with the <code>variables</code> vector of variables.</p>
+<p>The <code>predict_profiles()</code> function calculates Ceteris Paribus profiles for a selected model and selected observations. By default, it calculates profiles for all variables, but one can limit this list with the argument <code>variables</code>. The calculated profiles can be drawn with the <code>plot</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>cp_steve <span class="op">=</span> explainer_rfc_tuned.predict_profile(Steve)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The calculated profiles can be drawn with the generic <code>plot</code> function. As with other explanations in the <code>DALEX</code> library, multiple models can be plotted on a single graph. Although for technical reasons quantitative and qualitative variables cannot be shown in a single chart. So if you want to show the importance of quality variables, you need to plot them separately.</p>
-<p><a href="#fig-cp_ranger">Figure&nbsp;<span>3</span></a> shows an example of a CP profile for continuous variable <code>Age</code> and categorical variable <code>Cardiovascular.Diseases</code>.</p>
+<p>Here we plot CP for <code>Age</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cp_steve.plot(variables<span class="op">=</span><span class="st">"Age"</span>, show<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="fig-py_cp_ranger" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="figures/py_cp_ranger.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: The dot shows the observation under analysis. CP profile shows how the model predictions change for changes in the selected variable. On the left is the CP profile for the continuous variable <code>Age</code>, on the right for the categorical variable <code>Cardiovascular.Diseases</code>. For categorical variables, one can specify how the CP profiles should be drawn by setting the <code>categorical_type</code> argument.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: CP profiles for Steve. The dot shows the observation under analysis. CP profile shows how the model predictions change for changes in the selected variable. On the left is the CP profile for the continuous variable <code>Age</code>, on the right for the categorical variable <code>Cardiovascular.Diseases</code>. For categorical variables, one can specify how the CP profiles should be drawn by setting the <code>categorical_type</code> argument.</figcaption><p></p>
 </figure>
 </div>
-<p>The <code>plot</code> function can combine multiple models, making it easier to see similarities and differences.</p>
+<p>As with other explanations in the <code>dalex</code> library, multiple models can be plotted on a single graph.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cp_cdc <span class="op">=</span> explainer_cdc.predict_profile(Steve)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cp_dtc <span class="op">=</span> explainer_dtc.predict_profile(Steve)</span>
@@ -312,7 +320,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="r-snippets" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="r-snippets">R snippets</h2>
-<p>The <code>predict_profiles()</code> function calculates Ceteris Paribus profiles for a selected model and selected observations. By default, it calculates profiles for all variables, but one can limit this list with the <code>variables</code> vector of variables.</p>
+<p>The <code>predict_profiles()</code> function calculates Ceteris Paribus profiles for a selected model and selected observations. By default, it calculates profiles for all variables, and this may be time-consuming.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cp_ranger <span class="ot">&lt;-</span> <span class="fu">predict_profile</span>(model_ranger, Steve)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cp_ranger</span>
@@ -324,7 +332,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.110   Male  0.99                     Yes       No</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The calculated profiles can be drawn with the generic <code>plot</code> function. As with other explanations in the <code>DALEX</code> library, multiple models can be plotted on a single graph. Although for technical reasons quantitative and qualitative variables cannot be shown in a single chart. So if you want to show the importance of quality variables, you need to plot them separately.</p>
-<p><a href="#fig-cp_ranger">Figure&nbsp;<span>3</span></a> shows an example of a CP profile for continuous variable <code>Age</code> and categorical variable <code>Cardiovascular.Diseases</code>.</p>
+<p><a href="#fig-cp_ranger">Figure&nbsp;<span>3</span></a> shows an example of a CP profile for continuous variable <code>Age</code> and categorical variable <code>Cardiovascular.Diseases</code>. For categorical variables, one can specify how the CP profiles should be drawn by setting the <code>categorical_type</code> argument.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cp_ranger, <span class="at">variables =</span> <span class="st">"Age"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cp_ranger, <span class="at">variables =</span> <span class="st">"Cardiovascular.Diseases"</span>, </span>
@@ -333,10 +341,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="fig-cp_ranger" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="figures/09_r_cp_ranger.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: The dot shows the observation under analysis. CP profile shows how the model predictions change for changes in the selected variable. On the left is the CP profile for the continuous variable <code>Age</code>, on the right for the categorical variable <code>Cardiovascular.Diseases</code>. For categorical variables, one can specify how the CP profiles should be drawn by setting the <code>categorical_type</code> argument.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: CP for Steve calculated for the random forest model. The dot shows the observation under analysis. CP profile shows how the model predictions change for changes in the selected variable. On the left is the CP profile for the continuous variable <code>Age</code>, on the right for the categorical variable <code>Cardiovascular.Diseases</code>.</figcaption><p></p>
 </figure>
 </div>
-<p>The <code>plot</code> function can combine multiple models, making it easier to see similarities and differences.</p>
+<p>The <code>plot</code> function can combine multiple models, making it easier to see similarities and differences. In our case, we work with models based on step functions (handcrafted rules, trees, random forests), and even within such similar models, we can see differences in behaviour. These differences will be even greater if we include models with smooth responses, such as linear models, Support Vector Machines or neural network models.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cp_cdc <span class="ot">&lt;-</span> <span class="fu">predict_profile</span>(model_cdc, Steve)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cp_tree <span class="ot">&lt;-</span> <span class="fu">predict_profile</span>(model_tree, Steve)</span>
@@ -350,10 +358,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p></p><figcaption class="figure-caption">Figure&nbsp;4: CP profiles for Steve, colors code four considered models.</figcaption><p></p>
 </figure>
 </div>
+<p>Note that in the example analyzed, the largest differences between the analyzed models are in the group of the oldest patients. In the CDC model, a significant jump in mortality was observed for the group of people over 80 years old, while in the models trained on the data, mortality increases very rapidly from age 60 and quickly reaches very high values.</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
 <p>The size of the oscillation can be measured in many ways, by default, it is an area between the CP profile and a horizontal line at the level of the model prediction.</p>
-</div></div><p>CP profiles are also useful for finding the importance of variables in a model. The more the profiles fluctuate, the more influential the variable is. Such a measure of importance is implemented in the <code>predict_parts</code> function under option <code>type = "oscillations"</code>.</p>
+</div></div></section>
+<section id="variable-importance-through-oscillations" class="level2">
+<h2 class="anchored" data-anchor-id="variable-importance-through-oscillations">Variable importance through oscillations</h2>
+<p>CP profiles have many applications, both in analyzing the stability of a model and in determining which variables are important.</p>
+<p>When we examine the stability of a model, we may be concerned about large local variability in the CP profile, lack of monotonicity, and isolated narrow peaks. It turns out that such artefacts can often be seen on profiles for random forest models.</p>
+<p>When assessing the importance of variables, the following intuition accompanies the reasoning. The more the CP profiles fluctuate, the more influential the variable is. A measure of importance based on this intuition is implemented in the <code>predict_parts</code> function under option <code>type = "oscillations"</code>. The size of the oscillation can be measured in many ways, by default, it is an area between the CP profile and a horizontal line at the level of the model prediction.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict_parts</span>(model_ranger, Steve, <span class="at">type =</span> <span class="st">"oscillations"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                   _vname_ _ids_ oscillations</span></span>
@@ -365,6 +379,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 1                  Gender     1   0.03308303</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 5   Neurological.Diseases     1   0.03164090</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="is-this-the-end" class="level2">
+<h2 class="anchored" data-anchor-id="is-this-the-end">Is this the end?</h2>
+<p>PD, ALE, CP profiles, SHAP, Break down or permutational importance of variables have revealed a lot about the behaviour of considered models. However, they do not completely explore the possible scenarios for model analysis. One can dig deeper into the analysis of groups of variables or analysis of residuals.</p>
+<p>Based on the first iteration of the modelling process, we gain new knowledge of which variables are important (primarily age) what is the relationship between them and mortality (monotonic but not linear, more exponential or polynomial), which other variables are important (such as cardiovascular diseases). Equipped with this knowledge, we now can develop new models. But due to the limited volume of the book, we leave it to readers’ own experiments.</p>
 
 
 </section>

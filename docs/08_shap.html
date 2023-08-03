@@ -277,7 +277,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div class="no-row-height column-margin column-container"><div class="">
 <p><img width="100%" src="figures/08_logo.png"></p>
-</div></div><p>For tabular data, one of the most commonly used techniques for local variable attribution is Shapley values. The key idea behind this method is to analyze the sequence of conditional expected values. This way, we can trace how the conditional mean moves from the average model response to the model prediction for observation of interest <span class="math inline">\(x^*\)</span>. Let’s consider a sequence of expected values.</p>
+</div></div><p>For tabular data, one of the most commonly used techniques for local variable attribution is Shapley values. The key idea behind this method is to analyze the sequence of conditional expected values. This way, we can trace how the conditional mean moves from the average model response to the model prediction for observation of interest <span class="math inline">\(x^*\)</span>.</p>
+<p>Let’s consider a sequence of expected values for model predictions conditioned on expanding sequence of variables.</p>
 <p><img src="figures/08_equations.png" class="img-fluid"></p>
 <p>By looking at consecutive differences <span class="math inline">\(\mu_{x_1}-\mu\)</span>, <span class="math inline">\(\mu_{x_1,x_2}-\mu_{x_1}\)</span> and so on, one can calculate the added effects of individual variables, see an example in <a href="#fig-breakDown">Figure&nbsp;<span>1</span></a>. It sounds like a straightforward solution; however, there are two issues with this approach.</p>
 <p>One is that it is not easy to estimate the conditional expected value. In most implementations, it is assumed that features are independent, and then we can estimate <span class="math inline">\(\mu_{K}\)</span> as an average model response with variables in the set <span class="math inline">\(K\)</span> replaced by corresponding values from observation <span class="math inline">\(x^*\)</span>. So the crude estimate would be</p>
@@ -323,7 +324,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p></p><figcaption class="figure-caption">Figure&nbsp;2: Break-down contributions of each variable to the final model response.</figcaption><p></p>
 </figure>
 </div>
-<p>The alternative is to average over all (or at least many random) orderings of variables. This is how the Shapley values are calculated. The <code>show_boxplots</code> argument highlights the stability of the estimated attributions between different orderings. See <a href="#fig-py_shap_bd_ranger">Figure&nbsp;<span>3</span></a>.</p>
+<p>The alternative is to average over all (or at least many random) orderings of variables. This is how the Shapley values are calculated. The <code>show_boxplots</code> argument highlights the stability of the estimated attributions between different orderings.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>shap_steve.plot(show<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -333,12 +334,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p></p><figcaption class="figure-caption">Figure&nbsp;3: Shapley values contributions to the final model prediction.</figcaption><p></p>
 </figure>
 </div>
-<p>The Shapley values are additive. For models with interactions, it is often too much of simplification. Other possible values of the <code>type</code> argument are <code>shap</code>, <code>break_down</code>, <code>break_down_interactions</code> or <code>oscillations</code>.</p>
+<p>The Shapley values are additive. For models with interactions, it is often too much of a simplification. The attribution method that can be used to address this problem is Break-down with interactions. Just change the <code>type</code> argument to <code>break_down_interactions</code>.</p>
 <p>Note that by default, functions such as <code>model_parts</code>, <code>predict_parts</code>, <code>model_profiles</code> do not calculate statistics on the entire data set (this may be time-consuming), but on <code>n_samples</code> of random cases, and the entire procedure is repeated <code>B</code> times to estimate the error bars.</p>
 </section>
 <section id="r-snippets" class="level2">
 <h2 class="anchored" data-anchor-id="r-snippets">R snippets</h2>
-<p>Let’s define an observation for which we will examine the model more closely. Let it be a 76-year-old man with hypertension. We show a local model analysis using <code>model_ranger</code> as an example.</p>
+<p>Let’s create an observation for which we will examine the local behaviour of a model more closely. Let it be a 76-year-old man with hypertension, we will call him <code>Steve</code>. Below we use <code>model_ranger</code> to illustrate the local model analysis.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Steve <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Gender =</span> <span class="fu">factor</span>(<span class="st">"Male"</span>, <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>)),</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">Age                     =</span> <span class="dv">76</span>,</span>
@@ -350,7 +351,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model_ranger, Steve)</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.322</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The <code>predict_parts</code> function for a specified model and a specified observation calculates local variable attributions. The optional argument <code>order</code> forces use of a specified sequence of variables. If not specified, then a greedy heuristic is used to start conditioning with the most relevant variables. The results are presented in Figure <a href="#fig-shap_bd_ranger">Figure&nbsp;<span>4</span></a>.</p>
+<p>The <code>predict_parts</code> function for a specified model and a specified observation calculates local variable attributions. The optional argument <code>order</code> forces use of a specified sequence of variables. If not specified, then a greedy heuristic is used to start conditioning with the most relevant variables.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bd_ranger <span class="ot">&lt;-</span> <span class="fu">predict_parts</span>(model_ranger, Steve)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bd_ranger</span>
@@ -367,7 +368,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bd_ranger)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The alternative is to average over all (or at least many random) orderings of variables. This is how the Shapley values are calculated. The <code>show_boxplots</code> argument highlights the stability of the estimated attributions between different orderings. See <a href="#fig-shap_bd_ranger">Figure&nbsp;<span>4</span></a>.</p>
+<p>The alternative is to average over all (or at least many random) orderings of variables. This is how the Shapley values are calculated. The <code>show_boxplots</code> argument highlights the stability of the estimated attributions between different orderings.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>shap_ranger <span class="ot">&lt;-</span> <span class="fu">predict_parts</span>(model_ranger, Steve, <span class="at">type =</span> <span class="st">"shap"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(shap_ranger, <span class="at">show_boxplots =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -378,7 +379,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p></p><figcaption class="figure-caption">Figure&nbsp;4: Shapley values (left) and Break-down (right) illustrate the contributions of each variable to the final model response. Both attribution techniques ensure that the sum of the individual attributions adds up to the final model prediction.</figcaption><p></p>
 </figure>
 </div>
-<p>The Shapley values are additive. For models with interactions, it is often too much of simplification. Other possible values of the <code>type</code> argument are <code>shap</code>, <code>break_down</code>, <code>break_down_interactions</code> (this option can identify pairwise interactions, <a href="https://ema.drwhy.ai/iBreakDown.html">see Chapter 7</a>) or <code>oscillations</code>.</p>
+<p>The Shapley values are additive. For models with interactions, it is often too much of a simplification. An alternative variable attribution method that can be used to identify pairwise interactions is Break-down with interactions. Just change <code>type</code> argument to <code>break_down_interactions</code> value. See Chapter 7 in EMA book for more details.</p>
 <p>Note that by default, functions such as <code>model_parts</code>, <code>predict_parts</code>, <code>model_profiles</code> do not calculate statistics on the entire data set (this may be time-consuming), but on <code>n_samples</code> of random cases, and the entire procedure is repeated <code>B</code> times to estimate the error bars.</p>
 
 

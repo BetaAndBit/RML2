@@ -296,8 +296,8 @@ PD(i, t) = E\left[ f(x_1, ..., x_{i-1}, t, x_{i+1}, ..., x_p) \right],
 <div class="no-row-height column-margin column-container"><div class="">
 <p><img src="figures/macierz_pd.png" width="100%"></p>
 <p>In the data set, the variable <span class="math inline">\(i\)</span> is replaced by the value <span class="math inline">\(t\)</span>, then an average model response is calculated.</p>
-</div></div><p>Replacing <span class="math inline">\(i\)</span>-th variable by value <span class="math inline">\(t\)</span> can lead to very strange observations, especially when <span class="math inline">\(i\)</span>-th variable is correlated with other variables and we ignore the correlation structure. One solution to this are Accumulated Local Effects profiles, which average over the conditional distribution.</p>
-<p>Analysis of the Partial Dependence profile for each variable carries a lot of useful information. However, keep in mind that in complex models, you should expect complex interactions. Thus, one global profile for a variable may be an oversimplification. An extension of PD profiles is to calculate them in subgroups defined by some other variables or based on segments of observations found from model responses. You will find some examples below.</p>
+</div></div><p>When variables are correlated, then changes of <span class="math inline">\(i\)</span>-th variable independently from others may lead to very untypical observations, so called off-manifold observations. One solution to this is the method called Accumulated Local Effects explained in the EMA book.</p>
+<p>Analysis of the Partial Dependence profile for each variable carries a lot of useful information. However, keep in mind that in complex models, you should expect complex interactions. Thus, one global profile for a variable may be an oversimplification. An extension of PD profiles is to calculate them in subgroups defined by some other variables or based on segments of observations found from model responses.</p>
 <section id="python-snippets" class="level2">
 <h2 class="anchored" data-anchor-id="python-snippets">Python snippets</h2>
 <p>We use the <code>model_profile</code> method from the <code>dalex</code> package to calculate the variable profile. The only required argument is the model to be analyzed. It is a good idea to specify names of variables for profile estimation as a second argument; otherwise, profiles are calculated for all variables, which can take some time. One can also specify the exact grid of values for calculations of profiles.</p>
@@ -313,7 +313,7 @@ PD(i, t) = E\left[ f(x_1, ..., x_{i-1}, t, x_{i+1}, ..., x_p) \right],
 <p></p><figcaption class="figure-caption">Figure&nbsp;1: Partial dependence profile for Age variable.</figcaption><p></p>
 </figure>
 </div>
-<p>Since we have four models it is worth comparing how they differ in terms of the model’s response to the Age variable.</p>
+<p>Since we have four models it is worth comparing how they differ in terms of the model’s response to the <code>Age</code> variable.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>profile_cdc <span class="op">=</span> explainer_cdc.model_profile(variables<span class="op">=</span><span class="st">"Age"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>profile_dtc <span class="op">=</span> explainer_dtc.model_profile(variables<span class="op">=</span><span class="st">"Age"</span>)</span>
@@ -332,7 +332,7 @@ PD(i, t) = E\left[ f(x_1, ..., x_{i-1}, t, x_{i+1}, ..., x_p) \right],
 </section>
 <section id="grouped-partial-dependence-profiles" class="level2">
 <h2 class="anchored" data-anchor-id="grouped-partial-dependence-profiles">Grouped Partial Dependence profiles</h2>
-<p>By default, the average is calculated for all observations. But with the argument one can specify a grouping variable. PD profiles are calculated independently for each level of this variable.</p>
+<p>By default, the average is calculated for all observations. But with the argument <code>groups</code> one can force calculation of average within groups defined by a grouping variable.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>grouped_profile_rfc_tuned <span class="op">=</span> explainer_rfc_tuned.model_profile(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        variables<span class="op">=</span><span class="st">"Age"</span>, groups<span class="op">=</span><span class="st">"Diabetes"</span>)</span>
@@ -360,7 +360,7 @@ PD(i, t) = E\left[ f(x_1, ..., x_{i-1}, t, x_{i+1}, ..., x_p) \right],
 <p></p><figcaption class="figure-caption">Figure&nbsp;4: Partial dependence profile for Age variable.</figcaption><p></p>
 </figure>
 </div>
-<p>Since we have four models it is worth comparing how they differ in terms of the model’s response to the Age variable.</p>
+<p>Since we have four models it is worth comparing how they differ in terms of the model’s response to the <code>Age</code> variable.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mp_cdc    <span class="ot">&lt;-</span> <span class="fu">model_profile</span>(model_cdc, <span class="st">"Age"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mp_tree   <span class="ot">&lt;-</span> <span class="fu">model_profile</span>(model_tree, <span class="st">"Age"</span>)</span>
@@ -377,7 +377,7 @@ PD(i, t) = E\left[ f(x_1, ..., x_{i-1}, t, x_{i+1}, ..., x_p) \right],
 </section>
 <section id="grouped-partial-dependence-profiles-1" class="level2">
 <h2 class="anchored" data-anchor-id="grouped-partial-dependence-profiles-1">Grouped Partial Dependence profiles</h2>
-<p>By default, the average is calculated for all observations. But with the argument <code>groups</code> one can specify a grouping variable. PD profiles are calculated independently for each level of this variable.</p>
+<p>By default, the average is calculated for all observations. But with the argument <code>groups</code> one can specify a grouping variable. Then PD profiles are calculated independently taking into account only observations with a selected level of this variable.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mgroup_ranger <span class="ot">&lt;-</span> <span class="fu">model_profile</span>(model_ranger, <span class="st">"Age"</span>, </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">groups =</span> <span class="st">"Diabetes"</span>)</span>
@@ -393,7 +393,7 @@ PD(i, t) = E\left[ f(x_1, ..., x_{i-1}, t, x_{i+1}, ..., x_p) \right],
 </section>
 <section id="clustered-partial-dependence-profiles" class="level2">
 <h2 class="anchored" data-anchor-id="clustered-partial-dependence-profiles">Clustered Partial Dependence profiles</h2>
-<p>If the model is additive, then individual profiles (see the next Section related to profiles) are parallel. But if the model has interactions, individual profiles may have different shapes for different values of variables in each interaction. To see if there are such interactions we can cluster the individual profiles.</p>
+<p>When the model is additive, then individual profiles (see the next Section related to <em>Ceteris Paribus</em> profiles) are parallel. But if the model has interactions, individual profiles may have different shapes for different values of variables in each interaction. To see if there are such interactions we can cluster the individual profiles.</p>
 <p>If we specify the argument <code>k</code>, then the function <code>model_profile</code> performs a hierarchical clustering of the profiles, determines the group of k most different profiles and then calculates the Partial Dependence for each of these groups separately.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mclust_ranger <span class="ot">&lt;-</span> <span class="fu">model_profile</span>(model_ranger, <span class="st">"Age"</span>, </span>
